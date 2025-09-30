@@ -40,10 +40,21 @@ export default function HomePage() {
           <h1 className="text-5xl md:text-7xl font-extrabold mb-6 bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 bg-clip-text text-transparent drop-shadow-lg">
             FreeCode - Game
           </h1>
-          <p className="text-xl text-gray-800 max-w-2xl mx-auto leading-relaxed">
-            Trải nghiệm hành trình từ 25 đến 41 tuổi <br />
-            Nơi mỗi quyết định đều có thể thay đổi tương lai của bạn.
-          </p>
+            {/* 👉 Đưa nút bắt đầu lên ngay dưới tiêu đề */}
+  <div className="mt-6">
+    <Button
+      size="lg"
+      className="text-lg px-10 py-6 rounded-full 
+                bg-gradient-to-r from-emerald-300 via-lime-300 to-yellow-300
+                text-gray-900 font-bold shadow-xl hover:scale-105 hover:shadow-2xl transition-transform"
+      onClick={() => setGameStarted(true)}
+    >
+      🌱 Bắt đầu cuộc hành trình
+    </Button>
+    <p className="text-sm text-gray-700 mt-4">
+      Bạn sẽ bắt đầu ở tuổi 25, vừa ra trường và chuẩn bị bước vào đời
+    </p>
+  </div>
         </header>
 
         {/* Game Info Cards */}
@@ -195,17 +206,9 @@ export default function HomePage() {
 
         {/* Start Game */}
         <div className="text-center">
-          <Button
-            size="lg"
-            className="text-lg px-10 py-6 rounded-full 
-                      bg-gradient-to-r from-emerald-300 via-lime-300 to-yellow-300
-                      text-gray-900 font-bold shadow-xl hover:scale-105 hover:shadow-2xl transition-transform"
-            onClick={() => setGameStarted(true)}
-          >
-            🌱 Bắt đầu cuộc hành trình
-          </Button>
-          <p className="text-sm text-gray-700 mt-4">
-            Bạn sẽ bắt đầu ở tuổi 25, vừa ra trường và chuẩn bị bước vào đời
+          <p className="text-xl text-gray-800 max-w-2xl mx-auto leading-relaxed">
+            Trải nghiệm hành trình từ 25 đến 41 tuổi <br />
+            Nơi mỗi quyết định đều có thể thay đổi tương lai của bạn.
           </p>
         </div>
       </div>
