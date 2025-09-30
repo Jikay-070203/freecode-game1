@@ -283,3 +283,7 @@
     overflow-x: hidden;
   }
 }
+
+.game-gradient {
+  @apply bg-gradient-to-br from-emerald-100 via-sky-100 to-indigo-100;
+}

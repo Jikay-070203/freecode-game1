@@ -147,7 +147,7 @@ export function GameEngine() {
         </head>
         <body>
           <div class="header">
-            <h1>Ý Thức & Con Đường Cuộc Đời</h1>
+            <h1>Freecode Game</h1>
             <h2>Kết quả game</h2>
           </div>
           
@@ -223,9 +223,9 @@ export function GameEngine() {
       <div className="min-h-screen game-gradient flex items-center justify-center p-4">
         <Card className="w-full max-w-md mx-auto">
           <CardHeader className="text-center space-y-4">
-            <CardTitle className="text-xl sm:text-2xl leading-tight">Ý Thức & Con Đường Cuộc Đời</CardTitle>
+            <CardTitle className="text-xl sm:text-2xl leading-tight">Freecode Game</CardTitle>
             <CardDescription className="text-sm sm:text-base">
-              Nhập thông tin của bạn để bắt đầu hành trình mô phỏng cuộc sống
+              Nhập thông tin của bạn để bắt đầu hành trình.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -433,6 +433,17 @@ export function GameEngine() {
         // Kết thúc game
         newState.gameOver = true
         newState.ending = calculateEnding(newState)
+        // Gửi dữ liệu về Google Sheet
+fetch("https://script.google.com/macros/s/AKfycbygFegwgSpO7hTFD97-SxN5zqe-EmSrdyPbNnOAdMKeZybpvUni1rxkGjBZzIUwtPrP2Q/exec", {
+  method: "POST",
+  body: JSON.stringify({
+    type: "game",
+    name: playerInfo.name,
+    studentId: playerInfo.studentId,
+    score: newState.stats.FIN + newState.stats.CAR + newState.stats.HAP + newState.stats.FAM + newState.stats.HEA - newState.stats.STR, 
+    ending: newState.ending
+  })
+});
       } else {
         newState.age = nextAge
         newState.round = nextRound
@@ -709,50 +720,52 @@ export function GameEngine() {
   return (
     <div className="min-h-screen game-gradient">
       <div className="container mx-auto px-4 py-4 sm:py-8 max-w-7xl">
+        {/* Header */}
         <div className="flex items-center justify-between mb-6 sm:mb-8">
           <Button
             variant="outline"
             onClick={() => window.location.reload()}
-            className="flex items-center gap-2 h-10 sm:h-auto"
+            className="flex items-center gap-2 h-10 sm:h-auto bg-white/70 backdrop-blur-md border border-slate-200 shadow-sm"
             size="sm"
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Về trang chủ</span>
           </Button>
-
+  
           <div className="text-center">
-            <h1 className="text-xl sm:text-2xl font-bold">Tuổi {gameState.age}</h1>
-            <p className="text-sm text-muted-foreground">Vòng {gameState.round}/8</p>
-            <p className="text-xs text-muted-foreground mt-1 hidden sm:block">
+            <h1 className="text-xl sm:text-2xl font-bold text-slate-800">Tuổi {gameState.age}</h1>
+            <p className="text-sm text-slate-600">Vòng {gameState.round}/8</p>
+            <p className="text-xs text-slate-500 mt-1 hidden sm:block">
               {playerInfo.name} - {playerInfo.studentId}
             </p>
           </div>
-
+  
           <div className="flex items-center gap-2">
             <div className="hidden sm:flex gap-2">
-              <Button variant="outline" onClick={() => setShowStats(!showStats)} size="sm">
+              <Button variant="outline" onClick={() => setShowStats(!showStats)} size="sm" className="bg-white/80">
                 {showStats ? "Ẩn" : "Hiện"} chỉ số
               </Button>
-              <Button variant="outline" onClick={() => setShowCharts(!showCharts)} size="sm">
+              <Button variant="outline" onClick={() => setShowCharts(!showCharts)} size="sm" className="bg-white/80">
                 <BarChart3 className="h-4 w-4" />
               </Button>
             </div>
             <Button
               variant="outline"
               onClick={() => setShowMobileMenu(!showMobileMenu)}
-              className="sm:hidden"
+              className="sm:hidden bg-white/80"
               size="sm"
             >
               {showMobileMenu ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </Button>
           </div>
         </div>
-
+  
+        {/* Mobile menu */}
         {showMobileMenu && (
-          <Card className="mb-4 sm:hidden">
+          <Card className="mb-4 sm:hidden bg-white/80 backdrop-blur-md rounded-2xl shadow-md">
             <CardContent className="p-4">
               <div className="space-y-3">
-                <p className="text-sm text-muted-foreground text-center">
+                <p className="text-sm text-slate-600 text-center">
                   {playerInfo.name} - {playerInfo.studentId}
                 </p>
                 <div className="flex gap-2">
@@ -762,7 +775,7 @@ export function GameEngine() {
                       setShowStats(!showStats)
                       setShowMobileMenu(false)
                     }}
-                    className="flex-1"
+                    className="flex-1 bg-white/90"
                     size="sm"
                   >
                     {showStats ? "Ẩn" : "Hiện"} chỉ số
@@ -773,7 +786,7 @@ export function GameEngine() {
                       setShowCharts(!showCharts)
                       setShowMobileMenu(false)
                     }}
-                    className="flex-1"
+                    className="flex-1 bg-white/90"
                     size="sm"
                   >
                     <BarChart3 className="h-4 w-4 mr-2" />
@@ -784,16 +797,19 @@ export function GameEngine() {
             </CardContent>
           </Card>
         )}
-
+  
+        {/* Charts */}
         {showCharts && (
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-            <Card className="bg-card/80 backdrop-blur-sm">
+            <Card className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
+                <CardTitle className="flex items-center gap-2 text-lg text-slate-800">
                   <BarChart3 className="h-5 w-5" />
                   Biểu đồ radar
                 </CardTitle>
-                <CardDescription className="text-sm">Tổng quan về tình trạng cuộc sống</CardDescription>
+                <CardDescription className="text-sm text-slate-600">
+                  Tổng quan về tình trạng cuộc sống
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-64 sm:h-80">
@@ -801,14 +817,16 @@ export function GameEngine() {
                 </div>
               </CardContent>
             </Card>
-
-            <Card className="bg-card/80 backdrop-blur-sm">
+  
+            <Card className="bg-white/80 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
+                <CardTitle className="flex items-center gap-2 text-lg text-slate-800">
                   <TrendingUp className="h-5 w-5" />
                   Tiến trình theo thời gian
                 </CardTitle>
-                <CardDescription className="text-sm">Sự thay đổi các chỉ số qua từng giai đoạn</CardDescription>
+                <CardDescription className="text-sm text-slate-600">
+                  Sự thay đổi các chỉ số qua từng giai đoạn
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="h-64 sm:h-80">
@@ -818,32 +836,25 @@ export function GameEngine() {
             </Card>
           </div>
         )}
-
+  
+        {/* Stats */}
         {showStats && (
-          <Card className="mb-6 sm:mb-8 bg-card/80 backdrop-blur-sm">
+          <Card className="mb-6 sm:mb-8 bg-white/90 backdrop-blur-md rounded-2xl shadow-lg border border-slate-200">
             <CardHeader>
               <CardTitle className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <span className="text-lg">Chỉ số hiện tại</span>
+                <span className="text-lg font-semibold text-slate-800">🌟 Chỉ số hiện tại</span>
                 <div className="flex flex-wrap gap-2">
                   {gameState.married && (
-                    <Badge variant="secondary" className="text-xs">
-                      Đã cưới
-                    </Badge>
+                    <Badge className="text-xs rounded-full px-3 bg-pink-100 text-pink-600">💍 Đã cưới</Badge>
                   )}
                   {gameState.hasChildren && (
-                    <Badge variant="secondary" className="text-xs">
-                      Có con
-                    </Badge>
+                    <Badge className="text-xs rounded-full px-3 bg-yellow-100 text-yellow-600">👶 Có con</Badge>
                   )}
                   {gameState.hasHouse && (
-                    <Badge variant="secondary" className="text-xs">
-                      Có nhà
-                    </Badge>
+                    <Badge className="text-xs rounded-full px-3 bg-green-100 text-green-600">🏡 Có nhà</Badge>
                   )}
                   {gameState.rentingHouse && (
-                    <Badge variant="outline" className="text-xs">
-                      Thuê nhà
-                    </Badge>
+                    <Badge className="text-xs rounded-full px-3 bg-blue-100 text-blue-600">🏠 Thuê nhà</Badge>
                   )}
                 </div>
               </CardTitle>
@@ -860,27 +871,33 @@ export function GameEngine() {
             </CardContent>
           </Card>
         )}
-
+  
+        {/* Events */}
         {gameState.currentEvent && (
-          <Alert className="mb-6 sm:mb-8">
-            <AlertDescription className="text-center font-medium text-sm sm:text-base leading-relaxed">
-              {gameState.currentEvent}
+          <Alert className="mb-6 sm:mb-8 border-l-4 border-green-400 bg-green-50 text-green-700 animate-pulse rounded-xl">
+            <AlertDescription className="text-center font-medium text-base leading-relaxed">
+              🎉 {gameState.currentEvent}
             </AlertDescription>
           </Alert>
         )}
-
+  
+        {/* Choices */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
           {currentChoices.map((choice) => (
             <Card
               key={choice.id}
-              className="choice-card choice-preview cursor-pointer hover:border-primary transition-all duration-200 active:scale-95"
+              className="cursor-pointer rounded-2xl bg-white/90 backdrop-blur-md border border-slate-200 shadow-md hover:shadow-xl hover:border-emerald-400 transition-all duration-300 active:scale-95"
               onClick={() => makeChoice(choice)}
               onMouseEnter={() => previewChoice(choice)}
               onMouseLeave={clearPreview}
             >
               <CardHeader className="pb-3">
-                <CardTitle className="text-base sm:text-lg leading-tight">{choice.text}</CardTitle>
-                <CardDescription className="text-sm leading-relaxed">{choice.description}</CardDescription>
+                <CardTitle className="text-base sm:text-lg font-semibold text-slate-800">
+                  {choice.text}
+                </CardTitle>
+                <CardDescription className="text-sm text-slate-600">
+                  {choice.description}
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
@@ -889,9 +906,11 @@ export function GameEngine() {
                     const colorClass = STAT_COLORS[stat as keyof typeof STAT_COLORS]
                     return (
                       <div key={stat} className="flex items-center gap-2 text-sm">
-                        <Icon className={`h-4 w-4 ${colorClass} flex-shrink-0`} />
-                        <span className="min-w-0 flex-1">{stat}:</span>
-                        <span className={`font-medium ${value > 0 ? "text-green-600" : "text-red-600"}`}>
+                        <div className="p-1.5 bg-slate-100 rounded-full">
+                          <Icon className={`h-4 w-4 ${colorClass}`} />
+                        </div>
+                        <span className="min-w-0 flex-1 text-slate-700">{stat}</span>
+                        <span className={`font-semibold ${value > 0 ? "text-green-600" : "text-red-600"}`}>
                           {value > 0 ? "+" : ""}
                           {value}
                         </span>
@@ -903,13 +922,22 @@ export function GameEngine() {
             </Card>
           ))}
         </div>
-
-        <div className="mt-6 sm:mt-8">
-          <div className="flex justify-between text-sm text-muted-foreground mb-2">
-            <span>Tiến độ game</span>
-            <span>{gameState.round}/8 vòng</span>
+  
+        {/* Progress */}
+        <div className="mt-8">
+          <div className="flex justify-between text-sm text-slate-700 mb-2 font-medium">
+            <span>📈 Tiến độ game</span>
+            <span>Vòng {gameState.round}/8</span>
           </div>
-          <Progress value={(gameState.round / 8) * 100} className="h-2 sm:h-3" />
+          <div className="relative">
+            <Progress
+              value={(gameState.round / 8) * 100}
+              className="h-3 rounded-full bg-slate-200 [&>div]:bg-gradient-to-r [&>div]:from-emerald-400 [&>div]:to-sky-500 shadow-inner"
+            />
+            <span className="absolute inset-0 flex items-center justify-center text-xs font-semibold text-slate-700">
+              {Math.round((gameState.round / 8) * 100)}%
+            </span>
+          </div>
         </div>
       </div>
     </div>
