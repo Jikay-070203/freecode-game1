@@ -434,7 +434,7 @@ export function GameEngine() {
         newState.gameOver = true
         newState.ending = calculateEnding(newState)
         // Gửi dữ liệu về Google Sheet
-fetch("https://script.google.com/macros/s/AKfycbygFegwgSpO7hTFD97-SxN5zqe-EmSrdyPbNnOAdMKeZybpvUni1rxkGjBZzIUwtPrP2Q/exec", {
+fetch("https://script.google.com/macros/s/AKfycbzlLnf5edInmVUYkhB9MN5RZ8MYDTD0cRX2-ir6Tsr6IJX1V2N5EFA_A9HX7cQ26VgISg/exec", {
   method: "POST",
   body: JSON.stringify({
     type: "game",
